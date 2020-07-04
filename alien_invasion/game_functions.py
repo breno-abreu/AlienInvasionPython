@@ -2,6 +2,7 @@ import sys
 import pygame
 
 from projetil import Projetil
+from estrela import Estrela
 
 def check_events(nave, screen, projeteis):
     """Responde a eventos do mouse e do teclado"""
@@ -15,10 +16,14 @@ def check_events(nave, screen, projeteis):
         elif event.type == pygame.KEYUP:
              check_keyup_events(event, nave)
         
-def update_screen(configuracoes, screen, nave, projeteis):
+def update_screen(configuracoes, screen, nave, projeteis, estrelas):
     """Atualiza as imagens na tela e faz o flip na tela"""
     #Preenche a tela com uma cor
     screen.fill(configuracoes.bg_color)
+    
+    #Desenha as estrelas no background
+    for estrela in estrelas:
+        estrela.atualizar()
     
     #Desenha os projeteis de uma nave
     for projetil in projeteis:
@@ -62,6 +67,13 @@ def criar_tiro(projeteis, screen, nave):
     """Cria um novo projétil e o coloca na lista de projeteis"""
     novo_projetil = Projetil(screen, nave)
     projeteis.append(novo_projetil)
+    
+def criar_estrelas(screen, estrelas):
+    """Cria n novas estrelas"""
+    n = 50
+    for i in range(n):
+        nova_estrela = Estrela(screen)
+        estrelas.append(nova_estrela)
     
         
         

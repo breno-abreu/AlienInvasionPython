@@ -15,6 +15,9 @@ def rodar_jogo():
     
     clock = pygame.time.Clock()
     
+    #Cria as estrelas no background
+    estrelas = []
+    gf.criar_estrelas(screen, estrelas)
     
     #Cria uma nave
     nave = Nave(screen)
@@ -28,7 +31,8 @@ def rodar_jogo():
         gf.check_events(nave, screen, projeteis)
                 
         """Atualiza as imagens na tela"""
-        gf.update_screen(configuracoes, screen, nave, projeteis)
+        gf.update_screen(
+            configuracoes, screen, nave, projeteis, estrelas)
         
         """Mantem o FPS do jogo estável"""
         clock.tick(100)
