@@ -13,21 +13,25 @@ def rodar_jogo():
         (configuracoes.screen_width, configuracoes.screen_height))
     pygame.display.set_caption("Alien Invasion")
     
-    #clock = pygame.time.Clock()
+    clock = pygame.time.Clock()
+    
     
     #Cria uma nave
     nave = Nave(screen)
     
+    #Cria uma lista de projeteis
+    projeteis = []
+    
     """Inicia o loop principal do jogo"""
     while True:
         """Aguarda eventos de entrada do mouse e do teclado"""
-        gf.check_events(nave)
+        gf.check_events(nave, screen, projeteis)
                 
         """Atualiza as imagens na tela"""
-        gf.update_screen(configuracoes, screen, nave)
+        gf.update_screen(configuracoes, screen, nave, projeteis)
         
         """Mantem o FPS do jogo estável"""
-        #gf.define_FPS(clock, 80)
+        clock.tick(100)
         
 if __name__ == '__main__':
     rodar_jogo()

@@ -6,9 +6,9 @@ class Nave:
     def __init__(self, screen):
         """Inicializa a nave e sua posição inicial"""
         self.screen = screen
-        self.proporcao = 8
+        self.proporcao = 5
         self.direcao = 0
-        self.velocidade = 2
+        self.velocidade = 10
         self.cont_frames_fogo = 0
         self.cont_animacao_fogo = 0
         
@@ -48,7 +48,6 @@ class Nave:
             'images/nave_direita.png')
         self.image_direita  = pygame.transform.scale(
             self.image_direita , (self.image_width, self.image_height))
-            
             
         self.image_fogo = []
         #Carrega o primeiro frame da animação do fogo
@@ -115,8 +114,7 @@ class Nave:
                 "a nenhum valor predeterminado")
                 
     def atualizar(self):
-        """Dá vida a nave, chama o método que irá alterar
-        suas coordenadas, e o método que irá desenhar a nave na tela"""
+        """Atualiza os atributos da nave, e a desenha na tela"""
         
         if self.movimentando_direita:
             self.movimentar_direita()
@@ -131,24 +129,29 @@ class Nave:
         self.desenhar_fogo()
         
     def movimentar_direita(self):
+        """Movimenta a nave para a direita"""
         if self.rect.x + self.image_width <= self.screen_dimensions[0]:
             self.rect.x += self.velocidade
         self.direcao = 1
         
     def movimentar_esquerda(self):
+        """Movimenta a nava para a esquerda"""
         if self.rect.x >= 0:
             self.rect.x -= self.velocidade
         self.direcao = -1
         
     def estabilizar(self):
+        """Muda a animação da nave para ficar estabilizada"""
         self.direcao = 0
         
     def desenhar_fogo(self):
+        """Desenha o fogo abaixo da nave"""
         self.rect_fogo.x = self.rect.x
         self.rect_fogo.y = self.rect.y + self.image_height
         self.cont_frames_fogo += 1
         
-        if self.cont_frames_fogo == 30:
+        #Muda o frame de animação do fogo a cada 30 iterações
+        if self.cont_frames_fogo == 4:
             self.cont_frames_fogo = 0
             self.cont_animacao_fogo += 1
             if(self.cont_animacao_fogo > 2):
