@@ -5,7 +5,7 @@ class Explosao:
     def __init__(self, screen, coord_x, coord_y):
         self.screen = screen
         self.images = []
-        self.proporcao = 5
+        self.proporcao = 6
         self.cont_animacao = 0
         self.cont_frames = 0
         self.na_tela = True

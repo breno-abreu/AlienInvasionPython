@@ -6,7 +6,7 @@ class Projetil:
     def __init__(self, screen, nave):
         """Inicializa as coordenadas do tiro"""
         self.screen = screen
-        self.proporcao = 5
+        self.proporcao = 6
         self.velocidade = 20
         self.na_tela = True
         

@@ -5,8 +5,8 @@ class AlienAmarelo:
     def __init__(self, screen, coord_x, coord_y):
         """Inicializa a imagem, a velocidade e as coordenadas"""
         self.screen = screen
-        self.proporcao = 5
-        self.velocidade = 5
+        self.proporcao = 6
+        self.velocidade = 2
         self.images = []
         self.cont_animacao = 0
         self.cont_frames = 0
@@ -66,6 +66,8 @@ class AlienAmarelo:
         
     def atualizar(self):
         """Atualiza as coordenadas e desenha o alien"""
+        self.rect.y += self.velocidade
+        
         if self.rect.y >= self.screen_dimensions[1]:
             self.na_tela = False
         

@@ -6,7 +6,7 @@ class Nave:
     def __init__(self, screen):
         """Inicializa a nave e sua posição inicial"""
         self.screen = screen
-        self.proporcao = 5
+        self.proporcao = 6
         self.direcao = 0
         self.velocidade = 10
         self.cont_frames_fogo = 0

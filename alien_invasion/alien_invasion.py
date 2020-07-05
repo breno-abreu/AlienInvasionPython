@@ -20,25 +20,23 @@ def rodar_jogo():
     estrelas = []
     aliens_amarelos = []
     explosoes = []
+    contador = [0]
     gf.criar_estrelas(screen, estrelas)
-    
-    novo_alien = AlienAmarelo(screen, 100, 100)
-    aliens_amarelos.append(novo_alien)
     
     #Cria uma nave
     nave = Nave(screen)
     
-    #Cria uma lista de projeteis
+    #Cria uma lista de projeteis 
     projeteis = []
     
     """Inicia o loop principal do jogo"""
     while True:
         """Aguarda eventos de entrada do mouse e do teclado"""
         gf.check_events(nave, screen, projeteis)
-                
+        
         """Atualiza as imagens na tela"""
         gf.update_screen(
-            configuracoes, screen, nave, projeteis, estrelas,
+            contador, configuracoes, screen, nave, projeteis, estrelas,
             aliens_amarelos, explosoes)
         
         """Mantem o FPS do jogo estável"""

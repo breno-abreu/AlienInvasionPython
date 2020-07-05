@@ -1,5 +1,6 @@
 import sys
 import pygame
+import random
 
 from projetil import Projetil
 from estrela import Estrela
@@ -18,11 +19,15 @@ def check_events(nave, screen, projeteis):
         elif event.type == pygame.KEYUP:
              check_keyup_events(event, nave)
         
-def update_screen(configuracoes, screen, nave, projeteis, estrelas, 
-     aliens_amarelos, explosoes):
+        
+def update_screen(contador, configuracoes, screen, nave, projeteis, 
+    estrelas, aliens_amarelos, explosoes):
     """Atualiza as imagens na tela e faz o flip na tela"""
     #Preenche a tela com uma cor
     screen.fill(configuracoes.bg_color)
+
+    #Criar alienígenas
+    criar_aliens(screen, contador, aliens_amarelos)
     
     #Testa a colisao entre projeteis e aliens amarelos
     for projetil in projeteis:
@@ -32,7 +37,6 @@ def update_screen(configuracoes, screen, nave, projeteis, estrelas,
                     screen, explosoes, alien.rect.x, alien.rect.y)
                 alien.na_tela = False
                 projetil.na_tela = False
-                
     
     #Desenha as estrelas no background
     for estrela in estrelas:
@@ -75,6 +79,7 @@ def update_screen(configuracoes, screen, nave, projeteis, estrelas,
 def define_FPS(clock, fps):
     clock.tick(fps)
 
+
 def check_keydown_events(event, nave, projeteis, screen):
     """Checa se alguma tecla está pressionada"""
     if event.key == pygame.K_RIGHT:
@@ -86,6 +91,7 @@ def check_keydown_events(event, nave, projeteis, screen):
     elif event.key == pygame.K_SPACE:
         #Cria um tiro de nave
         criar_tiro(projeteis, screen, nave)
+         
                 
 def check_keyup_events(event, nave):
     """Checa se uma telca parou de ser pressionada"""
@@ -94,10 +100,12 @@ def check_keyup_events(event, nave):
     elif event.key == pygame.K_LEFT:
         nave.movimentando_esquerda = False
         
+        
 def criar_tiro(projeteis, screen, nave):
     """Cria um novo projétil e o coloca na lista de projeteis"""
     novo_projetil = Projetil(screen, nave)
     projeteis.append(novo_projetil)
+    
     
 def criar_estrelas(screen, estrelas):
     """Cria n novas estrelas"""
@@ -105,6 +113,7 @@ def criar_estrelas(screen, estrelas):
     for i in range(n):
         nova_estrela = Estrela(screen)
         estrelas.append(nova_estrela)
+        
         
 def testar_colisao(a, b):
     """Testa a colisao entre duas entidades"""
@@ -116,9 +125,32 @@ def testar_colisao(a, b):
     else:
         return False
         
+        
 def criar_explosao(screen, explosoes, coord_x, coord_y):
+    """Cria uma explosão em determinadas coordenadas"""
     nova_explosao = Explosao(screen, coord_x, coord_y)
     explosoes.append(nova_explosao)
+    
+    
+def criar_alien_amarelo(screen, aliens_amarelos, coord_x, coord_y):
+    novo_alien_amarelo = AlienAmarelo(screen, coord_x, coord_y)
+    aliens_amarelos.append(novo_alien_amarelo)
+    
+    
+def criar_aliens(screen, contador, aliens_amarelos):
+    """Cria alienígenas de todos os tipos"""
+    #Define as dimensões da tela
+    screen_dimensions = pygame.display.get_surface().get_size()
+    contador[0] += 1
+    
+    if contador[0] >= 100:
+        contador[0] = 0
+        coord_x = random.randint(0, screen_dimensions[0] - 40)
+        criar_alien_amarelo(screen, aliens_amarelos, coord_x, -40)
+        
+        
+        
+        
     
     
         
