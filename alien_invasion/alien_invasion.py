@@ -24,8 +24,10 @@ def rodar_jogo():
     aliens_vermelhos = []
     projeteis_verdes = []
     projeteis_vermelhos = []
+    vidas = []
+    moedas = []
     explosoes = []
-    contador = [0, 0, 130]
+    contador = [0, 0, 130, 0]
     gf.criar_estrelas(screen, estrelas)
     
     #Cria uma nave
@@ -43,7 +45,7 @@ def rodar_jogo():
         gf.update_screen(
             contador, configuracoes, screen, nave, projeteis, estrelas,
             aliens_amarelos, aliens_verdes, explosoes, projeteis_verdes,
-            aliens_vermelhos, projeteis_vermelhos)
+            aliens_vermelhos, projeteis_vermelhos, vidas, moedas)
         
         """Mantem o FPS do jogo estável"""
         clock.tick(100)

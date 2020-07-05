@@ -10,6 +10,8 @@ from alien_verde import AlienVerde
 from alien_vermelho import AlienVermelho
 from projetil_verde import ProjetilVerde
 from projetil_vermelho import ProjetilVermelho
+from vida import Vida
+from moeda import Moeda
 
 def check_events(nave, screen, projeteis):
     """Responde a eventos do mouse e do teclado"""
@@ -26,14 +28,15 @@ def check_events(nave, screen, projeteis):
         
 def update_screen(contador, configuracoes, screen, nave, projeteis, 
     estrelas, aliens_amarelos, aliens_verdes, explosoes, 
-    projeteis_verdes, aliens_vermelhos, projeteis_vermelhos):
+    projeteis_verdes, aliens_vermelhos, projeteis_vermelhos, vidas,
+    moedas):
     """Atualiza as imagens na tela e faz o flip na tela"""
     #Preenche a tela com uma cor
     screen.fill(configuracoes.bg_color)
 
     #Criar alienígenas
-    criar_aliens(screen, contador, aliens_amarelos, aliens_verdes,
-        aliens_vermelhos)
+    criar_entidades(screen, contador, aliens_amarelos, aliens_verdes,
+        aliens_vermelhos, vidas, moedas)
     
     #Testa a colisao entre projeteis e aliens amarelos
     for projetil in projeteis:
@@ -62,7 +65,7 @@ def update_screen(contador, configuracoes, screen, nave, projeteis,
                 alien.na_tela = False
                 projetil.na_tela = False
                 
-    #Testa a colisao entre peojteis verdes e a nave
+    #Testa a colisao entre projteis verdes e a nave
     for projetil in projeteis_verdes:
         if testar_colisao(projetil, nave):
             projetil.na_tela = False
@@ -75,7 +78,27 @@ def update_screen(contador, configuracoes, screen, nave, projeteis,
     #Desenha as estrelas no background
     for estrela in estrelas:
         estrela.atualizar()
-    
+        
+    #Atualiza uma vida
+    for vida in vidas:
+        vida.atualizar()
+        
+    #Atualiza uma moeda
+    for moeda in moedas:
+        moeda.atualizar()
+        
+    #Testa a colisao entre a nave e uma vida
+    for vida in vidas:
+        if testar_colisao(vida, nave):
+            vida.na_tela = False
+            nave.vidas += 1
+            
+    #Testa a colisao entre a nave e uma moeda
+    for moeda in moedas:
+        if testar_colisao(moeda, nave):
+            moeda.na_tela = False
+            nave.pontos += 500
+        
     #Desenha os projeteis de uma nave
     for projetil in projeteis:
         projetil.atualizar()
@@ -142,6 +165,16 @@ def update_screen(contador, configuracoes, screen, nave, projeteis,
         if projetil.na_tela == False:
             projeteis_vermelhos.remove(projetil)
             
+    #Deleta uma vida
+    for vida in vidas.copy():
+        if vida.na_tela == False:
+            vidas.remove(vida)
+            
+    #Deleta uma moeda
+    for moeda in moedas.copy():
+        if moeda.na_tela == False:
+            moedas.remove(moeda)
+            
     #Atualizar explosoes
     for explosao in explosoes:
         explosao.atualizar()
@@ -204,8 +237,8 @@ def testar_colisao(a, b):
         a.rect.y < b.rect.y + b.image_height and
         a.rect.y + a.image_height > b.rect.y):
         return True
-    else:
-        return False
+        
+    return False
         
         
 def criar_explosao(screen, explosoes, coord_x, coord_y):
@@ -240,14 +273,35 @@ def criar_projetil_vermelho(screen, projeteis_vermelhos, coord_x,
         coord_y, fator_x)
     projeteis_vermelhos.append(novo_projetil_vermelho)
     
-def criar_aliens(screen, contador, aliens_amarelos, aliens_verdes, 
-    aliens_vermelhos):
+    
+def criar_vida(screen, vidas, coord_x, coord_y):
+    nova_vida = Vida(screen, coord_x, coord_y)
+    vidas.append(nova_vida)
+    
+    
+def criar_moeda(screen, moedas, coord_x, coord_y):
+    nova_moeda = Moeda(screen, coord_x, coord_y)
+    moedas.append(nova_moeda)
+    
+    
+def criar_entidades(screen, contador, aliens_amarelos, aliens_verdes, 
+    aliens_vermelhos, vidas, moedas):
     """Cria alienígenas de todos os tipos"""
     #Define as dimensões da tela
     screen_dimensions = pygame.display.get_surface().get_size()
     contador[0] += 1
-    
     contador[1] += 1
+    contador[3] += 1
+    
+    if contador[3] == 500:
+        contador[3] = 0
+        item = random.randint(0, 1)
+        coord_x = random.randint(40, screen_dimensions[0] - 100)
+        
+        if item == 0:
+            criar_vida(screen, vidas, coord_x, -40)
+        elif item == 1:
+            criar_moeda(screen, moedas, coord_x, -40)
     
     if contador[1] == 3000:
         contador[1] == 0
@@ -257,17 +311,15 @@ def criar_aliens(screen, contador, aliens_amarelos, aliens_verdes,
     if contador[0] >= contador[2]:
         contador[0] = 0
         tipo_alien = random.randint(0, 2)
+        coord_x = random.randint(40, screen_dimensions[0] - 100)
         
         if tipo_alien == 0:
-            coord_x = random.randint(40, screen_dimensions[0] - 100)
             criar_alien_amarelo(screen, aliens_amarelos, coord_x, -40)
         
         elif tipo_alien == 1:
-            coord_x = random.randint(40, screen_dimensions[0] - 100)
             criar_alien_verde(screen, aliens_verdes, coord_x, -40)
             
         elif tipo_alien == 2:
-            coord_x = random.randint(40, screen_dimensions[0] - 100)
             criar_alien_vermelho(screen, aliens_vermelhos, coord_x, -40)
         
         

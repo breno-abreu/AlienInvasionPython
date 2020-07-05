@@ -14,6 +14,8 @@ class Nave:
         self.ultima_direcao = 0
         self.inercia = self.velocidade
         self.cont_inercia = 0
+        self.vidas = 3
+        self.pontos = 0
         
         #Flags de movimentação
         self.movimentando_direita = False
@@ -153,7 +155,7 @@ class Nave:
         """Muda a animação da nave para ficar estabilizada"""
         self.direcao = 0
         
-        if self.ultima_direcao == 1:
+        """if self.ultima_direcao == 1:
             self.cont_inercia += 1
             if self.cont_inercia >= 5:
                 self.inercia -= 1
@@ -169,7 +171,7 @@ class Nave:
                 if self.inercia < 0:
                     self.inercia = 0
                     
-            self.rect.x -= self.inercia
+            self.rect.x -= self.inercia"""
         
     def desenhar_fogo(self):
         """Desenha o fogo abaixo da nave"""
