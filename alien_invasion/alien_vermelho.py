@@ -1,12 +1,12 @@
 import pygame
 
-class AlienAmarelo:
+class AlienVermelho:
     """Classe para um inimigo alienígena amarelo"""
     def __init__(self, screen, coord_x, coord_y):
         """Inicializa a imagem, a velocidade e as coordenadas"""
         self.screen = screen
         self.proporcao = 6
-        self.velocidade = 3
+        self.velocidade = 1
         self.images = []
         self.cont_animacao = 0
         self.cont_frames = 0
@@ -14,15 +14,17 @@ class AlienAmarelo:
         self.x_aux = coord_x
         self.cont_x = 0
         self.direcao = 0
+        self.atirar = False
+        self.cont_projetil = 0
         
         #Define as dimensões da tela
         self.screen_dimensions = pygame.display.get_surface().get_size()
         
         #Carrega o primeiro frame da imagem
-        self.image1 = pygame.image.load('images/alien_amarelo1.png')
+        self.image1 = pygame.image.load('images/alien_vermelho1.png')
             
         #Carrega o segundo frame da imagem
-        self.image2 = pygame.image.load('images/alien_amarelo2.png')
+        self.image2 = pygame.image.load('images/alien_vermelho2.png')
             
         #Define as variáveis que determinam a altura e o comprimento...
         #...de uma imagem que terá sua resolução modificada
@@ -70,43 +72,21 @@ class AlienAmarelo:
     def atualizar(self):
         """Atualiza as coordenadas e desenha o alien"""
         self.rect.y += self.velocidade
+        self.cont_projetil += 1
         
-        if self.direcao == 0:
-            self.rect.x += self.velocidade / 2
-        else:
-            self.rect.x -= self.velocidade / 2
-            
-        self.cont_x += 1
-        
-        if self.cont_x >= 80:
-            self.cont_x = 0
-            if self.direcao == 0:
-                self.direcao = 1
-            else:
-                self.direcao = 0
+        #Alien atira um projetil
+        if self.cont_projetil >= 120:
+            self.cont_projetil = 0
+            self.atirar = True
         
         if self.rect.y >= self.screen_dimensions[1]:
             self.na_tela = False
         
         self.desenhar()
         
-            
         
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+

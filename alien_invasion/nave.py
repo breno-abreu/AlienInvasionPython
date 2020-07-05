@@ -11,6 +11,9 @@ class Nave:
         self.velocidade = 10
         self.cont_frames_fogo = 0
         self.cont_animacao_fogo = 0
+        self.ultima_direcao = 0
+        self.inercia = self.velocidade
+        self.cont_inercia = 0
         
         #Flags de movimentação
         self.movimentando_direita = False
@@ -117,9 +120,15 @@ class Nave:
         """Atualiza os atributos da nave, e a desenha na tela"""
         
         if self.movimentando_direita:
+            self.ultima_direcao = 1
+            self.cont_inercia = 0
+            self.inercia = self.velocidade
             self.movimentar_direita()
         
         elif self.movimentando_esquerda:
+            self.ultima_direcao = -1
+            self.cont_inercia = 0
+            self.inercia = self.velocidade
             self.movimentar_esquerda()
             
         else:
@@ -143,6 +152,24 @@ class Nave:
     def estabilizar(self):
         """Muda a animação da nave para ficar estabilizada"""
         self.direcao = 0
+        
+        if self.ultima_direcao == 1:
+            self.cont_inercia += 1
+            if self.cont_inercia >= 5:
+                self.inercia -= 1
+                if self.inercia < 0:
+                    self.inercia = 0
+                    
+            self.rect.x += self.inercia
+            
+        elif self.ultima_direcao == -1:
+            self.cont_inercia += 1
+            if self.cont_inercia >= 3:
+                self.inercia -= 1
+                if self.inercia < 0:
+                    self.inercia = 0
+                    
+            self.rect.x -= self.inercia
         
     def desenhar_fogo(self):
         """Desenha o fogo abaixo da nave"""

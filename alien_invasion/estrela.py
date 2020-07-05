@@ -10,7 +10,7 @@ class Estrela:
         self.screen = screen
         
         #Define a velocidade da estrela
-        self.velocidade = random.randint(5, 17)
+        self.velocidade = random.randint(8, 20)
         
         #Define o tamanho da estrela
         self.tamanho = random.randint(2, 5)
