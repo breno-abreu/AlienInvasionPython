@@ -3,6 +3,8 @@ import pygame
 
 from projetil import Projetil
 from estrela import Estrela
+from alien_amarelo import AlienAmarelo
+from explosao import Explosao
 
 def check_events(nave, screen, projeteis):
     """Responde a eventos do mouse e do teclado"""
@@ -16,10 +18,21 @@ def check_events(nave, screen, projeteis):
         elif event.type == pygame.KEYUP:
              check_keyup_events(event, nave)
         
-def update_screen(configuracoes, screen, nave, projeteis, estrelas):
+def update_screen(configuracoes, screen, nave, projeteis, estrelas, 
+     aliens_amarelos, explosoes):
     """Atualiza as imagens na tela e faz o flip na tela"""
     #Preenche a tela com uma cor
     screen.fill(configuracoes.bg_color)
+    
+    #Testa a colisao entre projeteis e aliens amarelos
+    for projetil in projeteis:
+        for alien in aliens_amarelos:
+            if testar_colisao(projetil, alien):
+                criar_explosao(
+                    screen, explosoes, alien.rect.x, alien.rect.y)
+                alien.na_tela = False
+                projetil.na_tela = False
+                
     
     #Desenha as estrelas no background
     for estrela in estrelas:
@@ -29,11 +42,29 @@ def update_screen(configuracoes, screen, nave, projeteis, estrelas):
     for projetil in projeteis:
         projetil.atualizar()
         
-    #Deleta projeteis que estão fora da tela
+    #Atualiza os alienigenas amarelos
+    for alien in aliens_amarelos:
+        alien.atualizar()
+        
+    #Deleta um projetil
     for projetil in projeteis.copy():
         if projetil.na_tela == False:
             projeteis.remove(projetil)
     
+    #Deleta um alien
+    for alien in aliens_amarelos.copy():
+        if alien.na_tela == False:
+            aliens_amarelos.remove(alien)
+            
+    #Atualizar explosoes
+    for explosao in explosoes:
+        explosao.atualizar()
+        
+    #Deleta explosoes
+    for explosao in explosoes.copy():
+        if explosao.na_tela == False:
+            explosoes.remove(explosao)
+            
     #Desenha a nave
     nave.atualizar()
                 
@@ -74,6 +105,21 @@ def criar_estrelas(screen, estrelas):
     for i in range(n):
         nova_estrela = Estrela(screen)
         estrelas.append(nova_estrela)
+        
+def testar_colisao(a, b):
+    """Testa a colisao entre duas entidades"""
+    if(a.rect.x < b.rect.x + b.image_width and 
+        a.rect.x + a.image_width > b.rect.x and
+        a.rect.y < b.rect.y + b.image_height and
+        a.rect.y + a.image_height > b.rect.y):
+        return True
+    else:
+        return False
+        
+def criar_explosao(screen, explosoes, coord_x, coord_y):
+    nova_explosao = Explosao(screen, coord_x, coord_y)
+    explosoes.append(nova_explosao)
+    
     
         
         

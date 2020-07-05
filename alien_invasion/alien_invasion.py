@@ -4,6 +4,7 @@ import pygame
 from settings import Settings
 from nave import Nave
 import game_functions as gf
+from alien_amarelo import AlienAmarelo
 
 def rodar_jogo():
     """Inicializa o jogo e cria uma janela"""
@@ -17,7 +18,12 @@ def rodar_jogo():
     
     #Cria as estrelas no background
     estrelas = []
+    aliens_amarelos = []
+    explosoes = []
     gf.criar_estrelas(screen, estrelas)
+    
+    novo_alien = AlienAmarelo(screen, 100, 100)
+    aliens_amarelos.append(novo_alien)
     
     #Cria uma nave
     nave = Nave(screen)
@@ -32,7 +38,8 @@ def rodar_jogo():
                 
         """Atualiza as imagens na tela"""
         gf.update_screen(
-            configuracoes, screen, nave, projeteis, estrelas)
+            configuracoes, screen, nave, projeteis, estrelas,
+            aliens_amarelos, explosoes)
         
         """Mantem o FPS do jogo estável"""
         clock.tick(100)
