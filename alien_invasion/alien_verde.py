@@ -11,11 +11,13 @@ class AlienVerde:
         self.cont_animacao = 0
         self.cont_frames = 0
         self.na_tela = True
+        self.destruido = False
         self.x_aux = coord_x
         self.cont_x = 0
         self.direcao = 0
         self.atirar = False
         self.cont_projetil = 0
+        self.pontos = 40
         
         #Define as dimensões da tela
         self.screen_dimensions = pygame.display.get_surface().get_size()

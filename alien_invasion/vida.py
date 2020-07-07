@@ -2,11 +2,12 @@ import pygame
 
 class Vida:
     """Cria um projetil verde"""
-    def __init__(self, screen, coord_x, coord_y):
+    def __init__(self, screen, coord_x, coord_y, hud):
         self.screen = screen
         self.proporcao = 6
         self.velocidade = 4
         self.na_tela = True
+        self.hud = hud
         
         #Guarda as dimensões da tela
         self.screen_dimensions = pygame.display.get_surface().get_size()
@@ -42,10 +43,32 @@ class Vida:
         
     def atualizar(self):
         """Movimenta um projetil"""
-        self.rect.y += self.velocidade
+        
+        if self.hud == False:
+            self.rect.y += self.velocidade
+            
         self.desenhar()
         
         #Caso o projétil não esteja mais na tela, self.na_tela será
         #modificado para permitir sua exclusão em game_functions
         if self.rect.y >= self.screen_dimensions[1]:
             self.na_tela = False
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            

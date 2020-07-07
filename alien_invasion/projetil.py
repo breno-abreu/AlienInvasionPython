@@ -9,6 +9,7 @@ class Projetil:
         self.proporcao = 6
         self.velocidade = 20
         self.na_tela = True
+        self.contato = False
         
         #Guarda as dimensões da tela
         self.screen_dimensions = pygame.display.get_surface().get_size()

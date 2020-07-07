@@ -7,6 +7,7 @@ class Moeda:
         self.proporcao = 6
         self.velocidade = 4
         self.na_tela = True
+        self.pontos = 500
         
         #Guarda as dimensões da tela
         self.screen_dimensions = pygame.display.get_surface().get_size()
