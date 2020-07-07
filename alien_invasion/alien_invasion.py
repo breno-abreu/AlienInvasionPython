@@ -5,6 +5,7 @@ from settings import Settings
 from nave import Nave
 from pontos import Pontos
 import game_functions as gf
+from menu import Menu
 
 
 def rodar_jogo():
@@ -77,19 +78,47 @@ def rodar_jogo():
     #Cria uma lista de projeteis que serão lançados pela nave
     projeteis = []
     
+    #Cria um menu de opções
+    menu = Menu(screen)
+    
+    
     while True:
         """Inicia o loop principal do jogo"""
+        screen.fill(configuracoes.bg_color)
+        gf.atualizar_estrelas(estrelas)
+            
+        if menu.opcao_menu == -1:
+            #Exibe o menu principal
+            gf.check_events_menu_principal(menu, aliens_amarelos, 
+                aliens_verdes, aliens_vermelhos, nave, pontos, 
+                explosoes, vidas_restantes, lista_auxiliar, screen, 
+                vidas, moedas, projeteis, projeteis_verdes, 
+                projeteis_vermelhos)
+            menu.atualizar()
+            
+        elif menu.opcao_menu == 0:
+            #Inicia o jogo
+            #Aguarda eventos de entrada do mouse e do teclado
+            gf.check_events(nave, screen, projeteis, lista_auxiliar, 
+                menu)
         
-        #Aguarda eventos de entrada do mouse e do teclado
-        gf.check_events(nave, screen, projeteis, lista_auxiliar)
+            #Atualiza entidades e as desenha na tela
+            gf.update_screen(
+                contador, configuracoes, screen, nave, projeteis, 
+                aliens_amarelos, aliens_verdes, explosoes, 
+                projeteis_verdes, aliens_vermelhos, projeteis_vermelhos,
+                vidas, moedas, vidas_restantes, pontos, lista_auxiliar)
         
-        #Atualiza entidades e as desenha na tela
-        gf.update_screen(
-            contador, configuracoes, screen, nave, projeteis, estrelas,
-            aliens_amarelos, aliens_verdes, explosoes, projeteis_verdes,
-            aliens_vermelhos, projeteis_vermelhos, vidas, moedas,
-            vidas_restantes, pontos, lista_auxiliar)
+    
+        elif menu.opcao_menu == 3:
+            gf.check_events_menu_pause(menu)
+            menu.atualizar()
         
+        elif menu.opcao_menu == 2:
+            sys.exit()
+            
+        pygame.display.flip()
+            
         #Mantem o FPS do jogo estável em 100 iterações por segundo
         clock.tick(100)
         

@@ -13,8 +13,9 @@ from projetil_verde import ProjetilVerde
 from projetil_vermelho import ProjetilVermelho
 from vida import Vida
 from moeda import Moeda
+from nave import Nave
 
-def check_events(nave, screen, projeteis, lista_auxiliar):
+def check_events(nave, screen, projeteis, lista_auxiliar, menu):
     """Responde a eventos do mouse e do teclado"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -22,20 +23,20 @@ def check_events(nave, screen, projeteis, lista_auxiliar):
             
         elif event.type == pygame.KEYDOWN:
             check_keydown_events(event, nave, projeteis, screen, 
-                lista_auxiliar)
+                lista_auxiliar, menu)
                 
         elif event.type == pygame.KEYUP:
              check_keyup_events(event, nave)
         
         
 def update_screen(contador, configuracoes, screen, nave, projeteis, 
-    estrelas, aliens_amarelos, aliens_verdes, explosoes, 
+    aliens_amarelos, aliens_verdes, explosoes, 
     projeteis_verdes, aliens_vermelhos, projeteis_vermelhos, vidas,
     moedas, vidas_restantes, pontos, lista_auxiliar):
     """Atualiza as imagens na tela, faz o flip na tela, teste
     colisões entre entidades, cria entidades e remove entidades"""
     #Preenche a tela com uma cor
-    screen.fill(configuracoes.bg_color)
+    #screen.fill(configuracoes.bg_color)
 
     #Criar alienígenas e itens quando o temporizador bater o tempo... 
     #...estipulado
@@ -43,30 +44,30 @@ def update_screen(contador, configuracoes, screen, nave, projeteis,
         aliens_vermelhos, vidas, moedas, lista_auxiliar)
         
     #Atualiza as entidades e as desenha na tela
-    atualizar_entidades(estrelas, aliens_amarelos, aliens_verdes, 
+    atualizar_entidades(aliens_amarelos, aliens_verdes, 
         aliens_vermelhos, nave, pontos, explosoes, vidas_restantes, 
         lista_auxiliar, screen, vidas, moedas, projeteis, 
         projeteis_verdes, projeteis_vermelhos)
         
     #Deleta entidades que não serão mais utilizadas
-    deletar_entidades(estrelas, aliens_amarelos, aliens_verdes, 
+    deletar_entidades(aliens_amarelos, aliens_verdes, 
         aliens_vermelhos, nave, pontos, explosoes, vidas_restantes, 
         lista_auxiliar, screen, vidas, moedas, projeteis, 
         projeteis_verdes, projeteis_vermelhos)
         
     #Testa a colisao entre entidades
-    testar_colisao_listas(estrelas, aliens_amarelos, aliens_verdes, 
+    testar_colisao_listas(aliens_amarelos, aliens_verdes, 
         aliens_vermelhos, nave, pontos, explosoes, vidas_restantes, 
         lista_auxiliar, screen, vidas, moedas, projeteis, 
         projeteis_verdes, projeteis_vermelhos)
 
     #Apaga a tela antiga e desenha a nova tela
-    pygame.display.flip()
+    #pygame.display.flip()
 
 
 def check_keydown_events(event, nave, projeteis, screen, 
-    lista_auxiliar):
-    """Checa se alguma tecla está pressionada"""
+    lista_auxiliar, menu):
+    """Checa se alguma tecla está pressionada dentro do jogo"""
     if event.key == pygame.K_RIGHT:
         #Move a nava para a direita
         nave.movimentando_direita = True
@@ -76,7 +77,56 @@ def check_keydown_events(event, nave, projeteis, screen,
     elif event.key == pygame.K_SPACE:
         #Cria um projetil da nave
         criar_projetil(projeteis, screen, nave, lista_auxiliar)
-         
+    elif event.key == pygame.K_ESCAPE:
+        #Retorna para o menu principal:
+        menu.opcao_menu = 3
+        menu.opcao = 0
+       
+def check_events_menu_principal(menu, aliens_amarelos, aliens_verdes, 
+    aliens_vermelhos, nave, pontos, explosoes, vidas_restantes, 
+    lista_auxiliar, screen, vidas, moedas, projeteis, projeteis_verdes,
+    projeteis_vermelhos):
+    """Checa se alguma tecla foi pressionada no menu principal"""
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+            
+        if event.type == pygame.KEYDOWN:
+            #Muda a opção do menu
+            if event.key == pygame.K_UP:
+                if menu.opcao > 0:
+                    menu.opcao -= 1
+            elif event.key == pygame.K_DOWN:
+                if menu.opcao < 2:
+                    menu.opcao += 1
+            elif event.key == pygame.K_RETURN:
+                #Determina qual menu será o próximo a ser exibido,... 
+                #...ou se o o jogo será iniciado
+                menu.opcao_menu = menu.opcao
+                if menu.opcao_menu == 0:
+                    limpar_listas(aliens_amarelos, aliens_verdes, 
+                        aliens_vermelhos, nave, pontos, explosoes, 
+                        vidas_restantes, lista_auxiliar, screen, vidas, 
+                        moedas, projeteis, projeteis_verdes,
+                        projeteis_vermelhos)
+                        
+        
+def check_events_menu_pause(menu):
+     for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+            
+        if event.type == pygame.KEYDOWN:
+            #Muda a opção do menu
+            if event.key == pygame.K_UP:
+                menu.opcao = 0
+            elif event.key == pygame.K_DOWN:
+                menu.opcao = -1
+            elif event.key == pygame.K_RETURN:
+                #Determina qual menu será o próximo a ser exibido,... 
+                #...ou se o o jogo será iniciado
+                menu.opcao_menu = menu.opcao
+                menu.opcao = 0
                 
 def check_keyup_events(event, nave):
     """Checa se uma tecla parou de ser pressionada"""
@@ -230,17 +280,17 @@ def criar_entidades(screen, contador, aliens_amarelos, aliens_verdes,
             
         elif tipo_alien == 2:
             criar_alien_vermelho(screen, aliens_vermelhos, coord_x, -40)
+            
+def atualizar_estrelas(estrelas):
+    """Desenha as estrelas no background"""
+    for estrela in estrelas:
+        estrela.atualizar()
         
-        
-def atualizar_entidades(estrelas, aliens_amarelos, aliens_verdes, 
+def atualizar_entidades(aliens_amarelos, aliens_verdes, 
     aliens_vermelhos, nave, pontos, explosoes, vidas_restantes, 
     lista_auxiliar, screen, vidas, moedas, projeteis, projeteis_verdes,
     projeteis_vermelhos):
     """Atualiza entidades e as desenha na tela"""
-    
-    #Desenha as estrelas no background
-    for estrela in estrelas:
-        estrela.atualizar()
         
     #Atualiza as vidas, moedas, projeteis da nave, pojeteis verdes e...
     #...projeteis vermelhos
@@ -286,7 +336,7 @@ def atualizar_entidades(estrelas, aliens_amarelos, aliens_verdes,
         vida.atualizar()
     
     
-def deletar_entidades(estrelas, aliens_amarelos, aliens_verdes, 
+def deletar_entidades(aliens_amarelos, aliens_verdes, 
     aliens_vermelhos, nave, pontos, explosoes, vidas_restantes, 
     lista_auxiliar, screen, vidas, moedas, projeteis, projeteis_verdes, 
     projeteis_vermelhos):
@@ -363,7 +413,7 @@ def deletar_entidades(estrelas, aliens_amarelos, aliens_verdes,
             explosoes.remove(explosao)
                 
         
-def testar_colisao_listas(estrelas, aliens_amarelos, aliens_verdes, 
+def testar_colisao_listas(aliens_amarelos, aliens_verdes, 
     aliens_vermelhos, nave, pontos, explosoes, vidas_restantes, 
     lista_auxiliar, screen, vidas, moedas, projeteis, projeteis_verdes, 
     projeteis_vermelhos):
@@ -446,8 +496,33 @@ def testar_colisao_listas(estrelas, aliens_amarelos, aliens_verdes,
         if testar_colisao(moeda, nave):
             moeda.na_tela = False
             nave.pontos += 500
-        
-        
+
+
+def limpar_listas(aliens_amarelos, aliens_verdes, aliens_vermelhos, 
+    nave, pontos, explosoes, vidas_restantes, lista_auxiliar, screen, 
+    vidas, moedas, projeteis, projeteis_verdes, projeteis_vermelhos):
+    
+    nave.pontos = 0
+    nave.vidas = 3
+    nave.invencivel = False
+    nave.rect.x = nave.aux_center
+
+    aliens_amarelos.clear()
+    aliens_verdes.clear()
+    aliens_vermelhos.clear()
+    pontos.def_string = '0'
+    explosoes.clear()
+    
+    vidas_restantes.clear()
+    criar_vidas_hud_inicial(screen, vidas_restantes)
+    
+    lista_auxiliar.clear()
+    vidas.clear()
+    moedas.clear()
+    projeteis.clear()
+    projeteis_verdes.clear()
+    projeteis_vermelhos.clear()
+    
         
         
         

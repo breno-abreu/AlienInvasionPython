@@ -96,6 +96,7 @@ class Nave:
         
         #Posiciona uma nave na parte de baixo e ao centro da tela
         self.rect.centerx = self.screen_rect.centerx
+        self.aux_center = self.screen_rect.centerx
         self.rect.y = (
             self.screen_dimensions[1] - 2 * self.image_height + 10)
             
