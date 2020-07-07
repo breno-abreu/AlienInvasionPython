@@ -16,6 +16,10 @@ class Nave:
         self.cont_inercia = 0
         self.vidas = 3
         self.pontos = 0
+        self.invencivel = False
+        self.cont_invencibilidade = 0
+        self.cont_aux_invencibilidade = 0
+        self.visivel = True
         
         #Flags de movimentação
         self.movimentando_direita = False
@@ -135,9 +139,29 @@ class Nave:
             
         else:
             self.estabilizar()
+            
+        if self.invencivel == True:
+            self.cont_invencibilidade += 1
+            if self.cont_invencibilidade == 150:
+                self.invencivel = False
+                self.cont_invencibilidade = 0
         
-        self.desenhar_nave()
-        self.desenhar_fogo()
+        if self.invencivel == False:
+            self.desenhar_nave()
+            self.desenhar_fogo()
+        else:
+            self.cont_aux_invencibilidade += 1
+            if (self.cont_aux_invencibilidade >= 3 and 
+                self.visivel == True):
+                self.desenhar_nave()
+                self.desenhar_fogo()
+                self.visivel = False
+                self.cont_aux_invencibilidade = 0
+                
+            elif (self.cont_aux_invencibilidade >= 1 and
+                self.visivel == False):
+                self.visivel = True
+                self.cont_aux_invencibilidade = 0
         
     def movimentar_direita(self):
         """Movimenta a nave para a direita"""

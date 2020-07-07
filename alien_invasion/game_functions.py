@@ -400,34 +400,39 @@ def testar_colisao_listas(estrelas, aliens_amarelos, aliens_verdes,
                 
     #Testa a colisao entre projeteis verdes e a nave
     for projetil in projeteis_verdes:
-        if testar_colisao(projetil, nave):
+        if testar_colisao(projetil, nave) and nave.invencivel == False:
             projetil.na_tela = False
             criar_explosao(
                     screen, explosoes, nave.rect.x, nave.rect.y)
             remove_vida_hud(vidas_restantes)
+            nave.invencivel = True
             
     #Testa a colisao entre projeteis vermelhos e a nave
     for projetil in projeteis_vermelhos:
-        if testar_colisao(projetil, nave):
+        if testar_colisao(projetil, nave) and nave.invencivel == False:
             projetil.na_tela = False
             criar_explosao(
                     screen, explosoes, nave.rect.x, nave.rect.y)
             remove_vida_hud(vidas_restantes)
+            nave.invencivel = True
             
-    #Testa colisão entre a nave e alienígenas
+    #Testa colisão entre a nave e alienígenas amarelos
     for alien in aliens_amarelos:
-        if testar_colisao(alien, nave):
+        if testar_colisao(alien, nave) and nave.invencivel == False:
             remove_vida_hud(vidas_restantes)
+            nave.invencivel = True
             
-    #Testa colisão entre a nave e alienígenas
+    #Testa colisão entre a nave e alienígenas vermelhos
     for alien in aliens_vermelhos:
-        if testar_colisao(alien, nave):
+        if testar_colisao(alien, nave) and nave.invencivel == False:
             remove_vida_hud(vidas_restantes)
+            nave.invencivel = True
             
-    #Testa colisão entre a nave e alienígenas
+    #Testa colisão entre a nave e alienígenas verdes
     for alien in aliens_verdes:
-        if testar_colisao(alien, nave):
+        if testar_colisao(alien, nave) and nave.invencivel == False:
             remove_vida_hud(vidas_restantes)
+            nave.invencivel = True
     
     #Testa a colisao entre a nave e uma vida
     for vida in vidas:
