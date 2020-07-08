@@ -17,6 +17,8 @@ class Menu:
         self.azul = (0, 60, 130)
         
         self.opcao = 0
+        self.texto_arquivo = ''
+        self.linhas_texto = []
         
         self.screen_dimensions = pygame.display.get_surface().get_size()
         self.screen_rect = screen.get_rect()
@@ -40,6 +42,8 @@ class Menu:
             self.amarelo)
         self.menu_principal = self.fonte42.render("Menu Principal", 
             True, self.branco)
+        self.texto_highscore = self.fonte42.render(self.texto_arquivo, 
+                    True, self.branco)
             
         self.rect_titulo = self.titulo.get_rect()
         self.rect_novo_jogo = self.novo_jogo.get_rect()
@@ -49,6 +53,8 @@ class Menu:
         self.rect_pause = self.pause.get_rect()
         self.rect_menu_principal = self.menu_principal.get_rect()
         self.rect_continuar = self.continuar.get_rect()
+        self.rect_texto_highscore = self.texto_highscore.get_rect()
+        
         
         self.rect_titulo.centerx = self.screen_rect.centerx
         self.rect_titulo.y = 200
@@ -70,6 +76,9 @@ class Menu:
         
         self.rect_menu_principal.centerx = self.screen_rect.centerx
         self.rect_menu_principal.y = 450
+        
+        self.rect_texto_highscore.centerx = self.screen_rect.centerx
+        self.rect_texto_highscore.y = 300
         
     def atualizar(self):
         """Cria um menu de acordo com a opcao recebida
@@ -118,7 +127,10 @@ class Menu:
             self.screen.blit(self.titulo, self.rect_titulo)
         
         elif self.opcao_menu == 1:
-            print("")
+            self.texto_highscore = self.fonte42.render(
+                self.texto_arquivo, True, self.branco)
+            self.screen.blit(self.texto_highscore, 
+                self.rect_texto_highscore)
             
         elif self.opcao_menu == 3:
             if self.opcao == 0:

@@ -1,0 +1,5 @@
+teste de highcscore
+pgb 100
+bma 500
+sft 300
+asd 200

@@ -110,6 +110,10 @@ def rodar_jogo():
                 vidas, moedas, vidas_restantes, pontos, lista_auxiliar)
         
     
+        elif menu.opcao == 1:
+            gf.check_events_menu_highscore(menu)
+            menu.atualizar()
+            
         elif menu.opcao_menu == 3:
             gf.check_events_menu_pause(menu)
             menu.atualizar()

@@ -1,24 +1,50 @@
 import pygame
 
 class Nave:
-    """Clase de uma nave espacial"""
+    """Clase que implementa a nave que será controlada pelo jogador.
+    Implementação péssima no que diz respeito ao carregamento e 
+    animação das imagens"""
     
     def __init__(self, screen):
         """Inicializa a nave e sua posição inicial"""
         self.screen = screen
+        
+        #Define qual a proporção em que a imagem da nave é em relação...
+        #...a imagem atual
         self.proporcao = 6
+        
+        #Indica a direção em que a nave está se movimentando
+        #0: parada; 1: direita; -1: esquerda
         self.direcao = 0
+        
+        #Velocidade de movimento da nave
         self.velocidade = 10
+        
+        #Contadores auxiliares da animação do fogo
         self.cont_frames_fogo = 0
         self.cont_animacao_fogo = 0
+        
+        #Armazena a última direção da nave antes de ficar parada
         self.ultima_direcao = 0
+        
+        #Armazena um fataor de inércia para a nave; NÃO FOI UTIIZADA
         self.inercia = self.velocidade
         self.cont_inercia = 0
+        
+        #Quantidade de vidas restantes do jogador
         self.vidas = 3
+        
+        #Quantidade de pontos do jogador
         self.pontos = 0
+        
+        #Indica se o jogador levou dano para ficar invencível
         self.invencivel = False
+        
+        #contadores auxiliares para quando o jogador leva dano
         self.cont_invencibilidade = 0
         self.cont_aux_invencibilidade = 0
+        
+        #Indica se a imagem da nave está visível ou não
         self.visivel = True
         
         #Flags de movimentação
@@ -57,8 +83,10 @@ class Nave:
             'images/nave_direita.png')
         self.image_direita  = pygame.transform.scale(
             self.image_direita , (self.image_width, self.image_height))
-            
+        
+        #Cria uma lista onde os frames do fogo serão incluídas
         self.image_fogo = []
+        
         #Carrega o primeiro frame da animação do fogo
         self.image_fogo1 = pygame.image.load(
             'images/fogo1.png')
@@ -100,57 +128,63 @@ class Nave:
         self.rect.y = (
             self.screen_dimensions[1] - 2 * self.image_height + 10)
             
+        #Atualiza as coordenadas do fogo
         self.rect_fogo.x = self.rect.x
         self.rect_fogo.y = self.rect.y + self.image_height
         
     def desenhar_nave(self):
         """Desenha a nave"""
         #Desenha a nave de acordo com o valor do atributo 'direcao'
-        #Caso a nave esteja imóvel
         if self.direcao == 0:
+            #Caso a nave esteja imóvel
             self.screen.blit(self.image_centro, self.rect)
-        #Caso a nave esteja se movimentando para a direita
+        
         elif self.direcao == 1:
+            #Caso a nave esteja se movimentando para a direita
             self.screen.blit(self.image_direita, self.rect)
-        #Caso a nave esteja se movimentando para a esquerda
+        
         elif self.direcao == -1:
+            #Caso a nave esteja se movimentando para a esquerda
             self.screen.blit(self.image_esquerda, self.rect)
-        #Caso o valor de 'direcao' não represente nada
-        else:
-            print("ERRO na classe 'Nave'. " +
-                "Método 'blitme'. " +
-                "Atributo 'direcao', " +
-                "direcao da nave não corresponde " +
-                "a nenhum valor predeterminado")
                 
     def atualizar(self):
         """Atualiza os atributos da nave, e a desenha na tela"""
         
         if self.movimentando_direita:
+            #Atualiza certas variáveis caso a nave esteja se...
+            #...movimentando para a direita
             self.ultima_direcao = 1
             self.cont_inercia = 0
             self.inercia = self.velocidade
             self.movimentar_direita()
         
         elif self.movimentando_esquerda:
+            #Atualiza certas variáveis caso a nave esteja se...
+            #...movimentando para a esquerda
             self.ultima_direcao = -1
             self.cont_inercia = 0
             self.inercia = self.velocidade
             self.movimentar_esquerda()
             
         else:
+            #Estabiliza a nave caso esteja parada
             self.estabilizar()
             
         if self.invencivel == True:
+            #Caso a nave tenha recebido dano, fia invencível por...
+            #...um determinado tempo
             self.cont_invencibilidade += 1
             if self.cont_invencibilidade == 150:
                 self.invencivel = False
                 self.cont_invencibilidade = 0
         
         if self.invencivel == False:
+            #Caso a nave não tenha recebido dano, desenha normalmente
             self.desenhar_nave()
             self.desenhar_fogo()
         else:
+            #Caso a nave tenha recebido dano, sua imagem ficará...
+            #...piscando para indicar sua invencibilidade temporária
             self.cont_aux_invencibilidade += 1
             if (self.cont_aux_invencibilidade >= 3 and 
                 self.visivel == True):
@@ -180,6 +214,9 @@ class Nave:
         """Muda a animação da nave para ficar estabilizada"""
         self.direcao = 0
         
+        #Código abandonado que iria criar um efeito de inércia...
+        #...na nave; deixa o jogo mais difícil pois a nave se torna...
+        #...mais difícil de controlar
         """if self.ultima_direcao == 1:
             self.cont_inercia += 1
             if self.cont_inercia >= 5:
@@ -199,18 +236,20 @@ class Nave:
             self.rect.x -= self.inercia"""
         
     def desenhar_fogo(self):
-        """Desenha o fogo abaixo da nave"""
+        """Desenha o fogo dos propulsores abaixo da nave"""
         self.rect_fogo.x = self.rect.x
         self.rect_fogo.y = self.rect.y + self.image_height
         self.cont_frames_fogo += 1
         
-        #Muda o frame de animação do fogo a cada 30 iterações
+        #Muda o frame de animação do fogo a cada 4 iterações
         if self.cont_frames_fogo == 4:
             self.cont_frames_fogo = 0
             self.cont_animacao_fogo += 1
             if(self.cont_animacao_fogo > 2):
+                #Quanto chega no último frame, repete a animação
                 self.cont_animacao_fogo = 0
             
+        #Desenha o fogo na tela
         self.screen.blit(
             self.image_fogo[self.cont_animacao_fogo], 
             self.rect_fogo)

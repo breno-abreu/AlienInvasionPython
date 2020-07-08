@@ -2,7 +2,7 @@ import pygame
 import random
 
 class Estrela:
-    """Classe de uma estrela no background"""
+    """Classe que implementa uma estrela que compõe o background"""
     
     def __init__(self, screen):
         """Cria uma estrela com tamanho, velocidade,

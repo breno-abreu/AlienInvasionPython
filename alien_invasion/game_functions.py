@@ -109,7 +109,18 @@ def check_events_menu_principal(menu, aliens_amarelos, aliens_verdes,
                         vidas_restantes, lista_auxiliar, screen, vidas, 
                         moedas, projeteis, projeteis_verdes,
                         projeteis_vermelhos)
-                        
+                elif menu.opcao_menu == 1:
+                    carregar_arquivo_highscore(menu)
+
+def check_events_menu_highscore(menu):
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+            
+        if event.type == pygame.KEYDOWN:
+            #Muda a opção do menu
+            if event.key == pygame.K_ESCAPE:
+                menu.opcao_menu = -1
         
 def check_events_menu_pause(menu):
      for event in pygame.event.get():
@@ -138,7 +149,7 @@ def check_keyup_events(event, nave):
         
 def criar_projetil(projeteis, screen, nave, lista_auxiliar):
     """Cria um novo projétil lançado pelo jogador"""
-    novo_projetil = Projetil(screen, nave)
+    novo_projetil = Projetil(screen, nave, 'images/tiro.png')
     projeteis.append(novo_projetil)
     lista_auxiliar.append(novo_projetil)
     
@@ -170,26 +181,30 @@ def criar_explosao(screen, explosoes, coord_x, coord_y):
 
 def criar_alien_amarelo(screen, aliens_amarelos, coord_x, coord_y):
     """Cria um novo alien amarelo"""
-    novo_alien_amarelo = AlienAmarelo(screen, coord_x, coord_y)
+    novo_alien_amarelo = AlienAmarelo(screen, coord_x, coord_y, 
+        'images/alien_amarelo1.png', 'images/alien_amarelo2.png')
     aliens_amarelos.append(novo_alien_amarelo)
     
     
 def criar_alien_verde(screen, aliens_verdes, coord_x, coord_y):
     """Cria um novo alien verde"""
-    novo_alien_verde = AlienVerde(screen, coord_x, coord_y)
+    novo_alien_verde = AlienVerde(screen, coord_x, coord_y,
+        'images/alien_verde1.png', 'images/alien_verde2.png')
     aliens_verdes.append(novo_alien_verde)
     
 
 def criar_alien_vermelho(screen, aliens_vermelhos, coord_x, coord_y):
     """Cria um novo alien vermelho"""
-    novo_alien_vermelho = AlienVermelho(screen, coord_x, coord_y)
+    novo_alien_vermelho = AlienVermelho(screen, coord_x, coord_y,
+        'images/alien_vermelho1.png', 'images/alien_vermelho2.png')
     aliens_vermelhos.append(novo_alien_vermelho)
     
     
 def criar_projetil_verde(screen, projeteis_verdes, coord_x, coord_y,
     lista_auxiliar):
     """Cria um novo projétil verde, criado por aliens verdes"""
-    novo_projetil_verde = ProjetilVerde(screen, coord_x, coord_y)
+    novo_projetil_verde = ProjetilVerde(screen, coord_x, coord_y, 
+        'images/projetil_verde.png')
     projeteis_verdes.append(novo_projetil_verde)
     lista_auxiliar.append(novo_projetil_verde)
     
@@ -198,14 +213,14 @@ def criar_projetil_vermelho(screen, projeteis_vermelhos, coord_x,
     coord_y, fator_x, lista_auxiliar):
     """Cria um novo projétil vermelho, criado por aliens vemelhos"""
     novo_projetil_vermelho = ProjetilVermelho(screen, coord_x, 
-        coord_y, fator_x)
+        coord_y, fator_x, 'images/projetil_vermelho.png')
     projeteis_vermelhos.append(novo_projetil_vermelho)
     lista_auxiliar.append(novo_projetil_vermelho)
     
     
 def criar_vida(screen, vidas, coord_x, coord_y, lista_auxiliar):
     """Cria uma vida que pdoe ser coletada pelo jogador"""
-    nova_vida = Vida(screen, coord_x, coord_y, False)
+    nova_vida = Vida(screen, coord_x, coord_y, False, 'images/vida.png')
     vidas.append(nova_vida)
     lista_auxiliar.append(nova_vida)
     
@@ -213,7 +228,7 @@ def criar_vida(screen, vidas, coord_x, coord_y, lista_auxiliar):
 def criar_vida_hud(screen, vidas_restantes):
     """Adiciona uma vida no HUD"""
     coord_x = 20 + len(vidas_restantes) * 60
-    nova_vida = Vida(screen, coord_x, 10, True)
+    nova_vida = Vida(screen, coord_x, 10, True, 'images/vida.png')
     vidas_restantes.append(nova_vida)
     
     
@@ -225,7 +240,7 @@ def criar_vidas_hud_inicial(screen, vidas_restantes):
     
 def criar_moeda(screen, moedas, coord_x, coord_y, lista_auxiliar):
     """Cria uma nova moeda"""
-    nova_moeda = Moeda(screen, coord_x, coord_y)
+    nova_moeda = Moeda(screen, coord_x, coord_y, 'images/moeda.png')
     moedas.append(nova_moeda)
     lista_auxiliar.append(nova_moeda)
     
@@ -523,8 +538,18 @@ def limpar_listas(aliens_amarelos, aliens_verdes, aliens_vermelhos,
     projeteis_verdes.clear()
     projeteis_vermelhos.clear()
     
-        
-        
+def carregar_arquivo_highscore(menu):
+    with open('highscore.txt') as arquivo:
+        linhas = arquivo.readlines()
+    
+    menu.linhas_texto = linhas
+    novo_texto = ''
+    
+    for linha in linhas:
+        menu.texto_arquivo += linha.rstrip() + "\n"
+        novo_texto += linha.rstrip() + "\n"
+    
+    print(novo_texto)
         
         
         
