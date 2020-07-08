@@ -16,27 +16,29 @@ from entidades.itens.moeda import Moeda
 from entidades.nave import Nave
 
 def check_events(nave, screen, projeteis, lista_auxiliar, menu):
-    """Responde a eventos do mouse e do teclado"""
+    """Responde a eventos do mouse e do teclado no jogo"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            #Caso o jogador clique no 'X' no canto da janela...
+            #... o jogo é finalizado
             sys.exit()
             
         elif event.type == pygame.KEYDOWN:
+            #Checa quando as telcas forem pressionadas
             check_keydown_events(event, nave, projeteis, screen, 
                 lista_auxiliar, menu)
                 
         elif event.type == pygame.KEYUP:
-             check_keyup_events(event, nave)
+            #Checa quando uma telcla deixa de ser pressionada
+            check_keyup_events(event, nave)
         
         
 def update_screen(contador, configuracoes, screen, nave, projeteis, 
     aliens_amarelos, aliens_verdes, explosoes, 
     projeteis_verdes, aliens_vermelhos, projeteis_vermelhos, vidas,
-    moedas, vidas_restantes, pontos, lista_auxiliar):
+    moedas, vidas_restantes, pontos, lista_auxiliar, menu):
     """Atualiza as imagens na tela, faz o flip na tela, teste
     colisões entre entidades, cria entidades e remove entidades"""
-    #Preenche a tela com uma cor
-    #screen.fill(configuracoes.bg_color)
 
     #Criar alienígenas e itens quando o temporizador bater o tempo... 
     #...estipulado
@@ -47,7 +49,7 @@ def update_screen(contador, configuracoes, screen, nave, projeteis,
     atualizar_entidades(aliens_amarelos, aliens_verdes, 
         aliens_vermelhos, nave, pontos, explosoes, vidas_restantes, 
         lista_auxiliar, screen, vidas, moedas, projeteis, 
-        projeteis_verdes, projeteis_vermelhos)
+        projeteis_verdes, projeteis_vermelhos, menu)
         
     #Deleta entidades que não serão mais utilizadas
     deletar_entidades(aliens_amarelos, aliens_verdes, 
@@ -60,9 +62,6 @@ def update_screen(contador, configuracoes, screen, nave, projeteis,
         aliens_vermelhos, nave, pontos, explosoes, vidas_restantes, 
         lista_auxiliar, screen, vidas, moedas, projeteis, 
         projeteis_verdes, projeteis_vermelhos)
-
-    #Apaga a tela antiga e desenha a nova tela
-    #pygame.display.flip()
 
 
 def check_keydown_events(event, nave, projeteis, screen, 
@@ -89,6 +88,7 @@ def check_events_menu_principal(menu, aliens_amarelos, aliens_verdes,
     """Checa se alguma tecla foi pressionada no menu principal"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            #Finaliza o programa
             sys.exit()
             
         if event.type == pygame.KEYDOWN:
@@ -96,35 +96,47 @@ def check_events_menu_principal(menu, aliens_amarelos, aliens_verdes,
             if event.key == pygame.K_UP:
                 if menu.opcao > 0:
                     menu.opcao -= 1
+                    
             elif event.key == pygame.K_DOWN:
                 if menu.opcao < 2:
                     menu.opcao += 1
+                    
             elif event.key == pygame.K_RETURN:
                 #Determina qual menu será o próximo a ser exibido,... 
                 #...ou se o o jogo será iniciado
                 menu.opcao_menu = menu.opcao
                 if menu.opcao_menu == 0:
+                    #Inicia o jogo
                     limpar_listas(aliens_amarelos, aliens_verdes, 
                         aliens_vermelhos, nave, pontos, explosoes, 
                         vidas_restantes, lista_auxiliar, screen, vidas, 
                         moedas, projeteis, projeteis_verdes,
                         projeteis_vermelhos)
+                        
                 elif menu.opcao_menu == 1:
+                    #Exibe o menu de highscores
                     carregar_arquivo_highscore(menu)
 
-def check_events_menu_highscore(menu):
+def check_events_highscore_morte(menu):
+    """Checa eventos do teclado e mouse na tela de highscores e na tela
+    de morte"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            #Finaliza o programa
             sys.exit()
             
         if event.type == pygame.KEYDOWN:
             #Muda a opção do menu
             if event.key == pygame.K_ESCAPE:
+                #Retorna para o menu princial
                 menu.opcao_menu = -1
+                menu.linhas_texto.clear()
         
 def check_events_menu_pause(menu):
-     for event in pygame.event.get():
+    """Chega os eventos do teclado"""
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            #Finaliza o programa
             sys.exit()
             
         if event.type == pygame.KEYDOWN:
@@ -263,7 +275,7 @@ def criar_entidades(screen, contador, aliens_amarelos, aliens_verdes,
     contador[3] += 1
     
     #Caso o contador 3 atinja o tempo, criar uma vida ou uma moeda
-    if contador[3] == 500:
+    if contador[3] == 1000:
         contador[3] = 0
         item = random.randint(0, 1)
         coord_x = random.randint(40, screen_dimensions[0] - 100)
@@ -275,7 +287,7 @@ def criar_entidades(screen, contador, aliens_amarelos, aliens_verdes,
     
     #Caso o contador 1 atinja o tempo, aumenta a velocidade em que...
     #...um alienígena será criado
-    if contador[1] == 3000:
+    if contador[1] == 1500:
         contador[1] == 0
         if contador[2] >= 50:
             contador[2] -= 5
@@ -284,16 +296,25 @@ def criar_entidades(screen, contador, aliens_amarelos, aliens_verdes,
     #...um alienígena será criado aleatoriamente
     if contador[0] >= contador[2]:
         contador[0] = 0
+        
+        #Cria uma variável aleatória que irá definir qual o próximo...
+        #...aliena ser criado
         tipo_alien = random.randint(0, 2)
+        
+        #Define qual a região horizontal na janela que um alien será...
+        #...criado. Recebe um número aleatório
         coord_x = random.randint(40, screen_dimensions[0] - 100)
         
         if tipo_alien == 0:
+            #Cria um alien amarelo
             criar_alien_amarelo(screen, aliens_amarelos, coord_x, -40)
         
         elif tipo_alien == 1:
+            #Cria um alien verde
             criar_alien_verde(screen, aliens_verdes, coord_x, -40)
             
         elif tipo_alien == 2:
+            #Cria um alien vermelho
             criar_alien_vermelho(screen, aliens_vermelhos, coord_x, -40)
             
 def atualizar_estrelas(estrelas):
@@ -304,7 +325,7 @@ def atualizar_estrelas(estrelas):
 def atualizar_entidades(aliens_amarelos, aliens_verdes, 
     aliens_vermelhos, nave, pontos, explosoes, vidas_restantes, 
     lista_auxiliar, screen, vidas, moedas, projeteis, projeteis_verdes,
-    projeteis_vermelhos):
+    projeteis_vermelhos, menu):
     """Atualiza entidades e as desenha na tela"""
         
     #Atualiza as vidas, moedas, projeteis da nave, pojeteis verdes e...
@@ -338,6 +359,9 @@ def atualizar_entidades(aliens_amarelos, aliens_verdes,
             
     #Atualiza a nave
     nave.atualizar()
+    
+    if nave.vidas < 1:
+        menu.opcao_menu = 5
             
     #Atualiza as explosoes
     for explosao in explosoes:
@@ -372,7 +396,10 @@ def deletar_entidades(aliens_amarelos, aliens_verdes,
     for alien in aliens_amarelos.copy():
         if alien.na_tela == False:
             if nave.pontos > 0:
-                nave.pontos -= 10
+                #Se o alien passa pelo jogador sem ser morto...
+                #...o jogador perde o dobro de pontos que o...
+                #...alien o daria caso tivesse sido destruído
+                nave.pontos -= alien.pontos * 2
             aliens_amarelos.remove(alien)
             
         elif alien.destruido == True:
@@ -382,7 +409,10 @@ def deletar_entidades(aliens_amarelos, aliens_verdes,
     for alien in aliens_verdes.copy():
         if alien.na_tela == False:
             if nave.pontos > 0:
-                nave.pontos -= 10
+                #Se o alien passa pelo jogador sem ser morto...
+                #...o jogador perde o dobro de pontos que o...
+                #...alien o daria caso tivesse sido destruído
+                nave.pontos -= alien.pontos * 2
             aliens_verdes.remove(alien)
             
         elif alien.destruido == True:
@@ -392,7 +422,10 @@ def deletar_entidades(aliens_amarelos, aliens_verdes,
     for alien in aliens_vermelhos.copy():
         if alien.na_tela == False:
             if nave.pontos > 0:
-                nave.pontos -= 10
+                #Se o alien passa pelo jogador sem ser morto...
+                #...o jogador perde o dobro de pontos que o...
+                #...alien o daria caso tivesse sido destruído
+                nave.pontos -= alien.pontos * 2
             aliens_vermelhos.remove(alien)
             
         elif alien.destruido == True:
@@ -471,6 +504,7 @@ def testar_colisao_listas(aliens_amarelos, aliens_verdes,
                     screen, explosoes, nave.rect.x, nave.rect.y)
             remove_vida_hud(vidas_restantes)
             nave.invencivel = True
+            nave.vidas -= 1
             
     #Testa a colisao entre projeteis vermelhos e a nave
     for projetil in projeteis_vermelhos:
@@ -480,24 +514,28 @@ def testar_colisao_listas(aliens_amarelos, aliens_verdes,
                     screen, explosoes, nave.rect.x, nave.rect.y)
             remove_vida_hud(vidas_restantes)
             nave.invencivel = True
+            nave.vidas -= 1
             
     #Testa colisão entre a nave e alienígenas amarelos
     for alien in aliens_amarelos:
         if testar_colisao(alien, nave) and nave.invencivel == False:
             remove_vida_hud(vidas_restantes)
             nave.invencivel = True
+            nave.vidas -= 1
             
     #Testa colisão entre a nave e alienígenas vermelhos
     for alien in aliens_vermelhos:
         if testar_colisao(alien, nave) and nave.invencivel == False:
             remove_vida_hud(vidas_restantes)
             nave.invencivel = True
+            nave.vidas -= 1
             
     #Testa colisão entre a nave e alienígenas verdes
     for alien in aliens_verdes:
         if testar_colisao(alien, nave) and nave.invencivel == False:
             remove_vida_hud(vidas_restantes)
             nave.invencivel = True
+            nave.vidas -= 1
     
     #Testa a colisao entre a nave e uma vida
     for vida in vidas:
@@ -516,7 +554,9 @@ def testar_colisao_listas(aliens_amarelos, aliens_verdes,
 def limpar_listas(aliens_amarelos, aliens_verdes, aliens_vermelhos, 
     nave, pontos, explosoes, vidas_restantes, lista_auxiliar, screen, 
     vidas, moedas, projeteis, projeteis_verdes, projeteis_vermelhos):
-    
+    """Deleta todos os elementos de todas as linhas, permitindo 
+    o início de uma nova fase"""
+    #Reseta algumas variáveis da nave
     nave.pontos = 0
     nave.vidas = 3
     nave.invencivel = False
@@ -525,31 +565,31 @@ def limpar_listas(aliens_amarelos, aliens_verdes, aliens_vermelhos,
     aliens_amarelos.clear()
     aliens_verdes.clear()
     aliens_vermelhos.clear()
-    pontos.def_string = '0'
-    explosoes.clear()
     
+    pontos.def_string = '0'
+    
+    explosoes.clear()
+    lista_auxiliar.clear()
+
+    vidas.clear()
     vidas_restantes.clear()
     criar_vidas_hud_inicial(screen, vidas_restantes)
-    
-    lista_auxiliar.clear()
-    vidas.clear()
     moedas.clear()
+    
     projeteis.clear()
     projeteis_verdes.clear()
     projeteis_vermelhos.clear()
     
 def carregar_arquivo_highscore(menu):
+    """Carrega a lista em 'menu' com as linhas de um arquivo de texto
+    NÃO ESTÁ FINALIZADO"""
     with open('highscore.txt') as arquivo:
+        #Lê um arquivo de texto
         linhas = arquivo.readlines()
     
-    menu.linhas_texto = linhas
-    novo_texto = ''
-    
     for linha in linhas:
-        menu.texto_arquivo += linha.rstrip() + "\n"
-        novo_texto += linha.rstrip() + "\n"
-    
-    print(novo_texto)
+        #Carrega uma lista com cada linha
+        menu.linhas_texto.append(linha)
         
         
         

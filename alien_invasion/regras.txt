@@ -1,0 +1,23 @@
+I. O jogador deve destruir o máximo de alienígenas possíveis até perder todas as vidas
+
+II. O jogador começa com 3 vidas, mas pode aumentar essa quantidade se pegar vidas extras
+	durante a partida
+
+III. Cada inimigo destruído dará ao jogador uma quantidade específica de pontos:
+	Alien Amarelo: 30 pontos
+	Alien Verde: 40 pontos
+	Alien Vermelho: 50 pontos
+
+IV. Caso o jogador deixe um alienígena passar por ele sem ser destruído, o jogador perderá
+	o dobro de pontos que receberia se o tivesse destruído:
+	Alien Amarelo: 60 pontos
+	Alien Verde: 80 pontos
+	Alien Vermelho: 100 pontos
+
+V. Caso o jogador erre ao atirar projéteis nos inimigos, perderá 10 pontos por tiro
+
+VI. O jogador pode pegar moedas que dão automaticamente 200 pontos
+
+VII. A dificuldade do jogo aumenta a cada 15 segundos. A dificuldade é dada pela velocidade
+	em que alienígenas são criados. Iniciando em um segundo e meio e podendo chegar até
+	meio segundo.

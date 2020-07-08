@@ -62,7 +62,7 @@ def rodar_jogo():
     #index 1: contador para mudança de dificuldade
     #index 2: tempo para a criação de um novo alien
     #index 3: contador para a criação de um novo item
-    contador = [0, 0, 130, 0]
+    contador = [0, 0, 150, 0]
     
     #Cria 50 estrelas que compõe o background
     gf.criar_estrelas(screen, estrelas)
@@ -83,7 +83,11 @@ def rodar_jogo():
     
     while True:
         """Inicia o loop principal do jogo"""
+        #Preenche o background
         screen.fill(configuracoes.bg_color)
+        
+        #Atualiza e desenha as erstrelas, que ficam presentes em...
+        #.. todos os menus e no jogo em si
         gf.atualizar_estrelas(estrelas)
             
         if menu.opcao_menu == -1:
@@ -106,18 +110,22 @@ def rodar_jogo():
                 contador, configuracoes, screen, nave, projeteis, 
                 aliens_amarelos, aliens_verdes, explosoes, 
                 projeteis_verdes, aliens_vermelhos, projeteis_vermelhos,
-                vidas, moedas, vidas_restantes, pontos, lista_auxiliar)
+                vidas, moedas, vidas_restantes, pontos, lista_auxiliar,
+                menu)
         
-    
-        elif menu.opcao == 1:
-            gf.check_events_menu_highscore(menu)
+        elif menu.opcao_menu == 1 or menu.opcao_menu == 5:
+            #Exibe o menu de highscores(a ser feito) e a tela para...
+            #...quando o jogador morre
+            gf.check_events_highscore_morte(menu)
             menu.atualizar()
             
         elif menu.opcao_menu == 3:
+            #Exibe o menu de pause
             gf.check_events_menu_pause(menu)
             menu.atualizar()
         
         elif menu.opcao_menu == 2:
+            #Se o jogador pressionar 'Sair' o jogo é terminado
             sys.exit()
             
         pygame.display.flip()
