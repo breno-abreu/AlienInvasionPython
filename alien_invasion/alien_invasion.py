@@ -1,12 +1,11 @@
 import sys
 import pygame
 
-from settings import Settings
-from nave import Nave
-from pontos import Pontos
-import game_functions as gf
-from menu import Menu
-
+from game_func.settings import Settings
+from entidades.nave import Nave
+from game_func.pontos import Pontos
+import game_func.game_functions as gf
+from game_func.menu import Menu
 
 def rodar_jogo():
     """Inicializa as estruturas de dados das entidades do jogo,

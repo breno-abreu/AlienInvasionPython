@@ -1,7 +1,7 @@
 import sys
 import pygame
 
-import game_functions as gf
+import game_func.game_functions as gf
 
 class Menu:
     """Classe que descreve os três menus encontrados no jogo:

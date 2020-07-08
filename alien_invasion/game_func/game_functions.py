@@ -3,17 +3,17 @@ import pygame
 import random
 import itertools
 
-from projetil import Projetil
-from estrela import Estrela
-from alien_amarelo import AlienAmarelo
-from explosao import Explosao
-from alien_verde import AlienVerde
-from alien_vermelho import AlienVermelho
-from projetil_verde import ProjetilVerde
-from projetil_vermelho import ProjetilVermelho
-from vida import Vida
-from moeda import Moeda
-from nave import Nave
+from entidades.projeteis.projetil import Projetil
+from entidades.estrela import Estrela
+from entidades.aliens.alien_amarelo import AlienAmarelo
+from entidades.explosao import Explosao
+from entidades.aliens.alien_verde import AlienVerde
+from entidades.aliens.alien_vermelho import AlienVermelho
+from entidades.projeteis.projetil_verde import ProjetilVerde
+from entidades.projeteis.projetil_vermelho import ProjetilVermelho
+from entidades.itens.vida import Vida
+from entidades.itens.moeda import Moeda
+from entidades.nave import Nave
 
 def check_events(nave, screen, projeteis, lista_auxiliar, menu):
     """Responde a eventos do mouse e do teclado"""

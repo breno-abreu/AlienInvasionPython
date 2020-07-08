@@ -1,6 +1,6 @@
 import pygame
 
-from entidade import Entidade
+from entidades.entidade import Entidade
 
 class Moeda(Entidade):
     """Classe que implementa uma moeda, item que derá ao jogador

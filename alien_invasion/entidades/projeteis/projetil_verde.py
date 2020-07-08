@@ -1,6 +1,6 @@
 import pygame
 
-from entidade import Entidade
+from entidades.entidade import Entidade
 
 class ProjetilVerde(Entidade):
     """Classe que implementa um projétil verde, que é criado

@@ -1,6 +1,6 @@
 import pygame
 
-from entidade import Entidade
+from entidades.entidade import Entidade
 
 class Projetil(Entidade):
     """Classe que implementa um projétil lançado pela nave controlada

@@ -1,24 +1,31 @@
 import pygame
 
-from alien import Alien
+from entidades.aliens.alien import Alien
 
-class AlienAmarelo(Alien):
-    """Classe que implementa um inimigo alienígena amarelo"""
+class AlienVerde(Alien):
+    """Classe que implementa um inimigo alienígena verde"""
     def __init__(self, screen, coord_x, coord_y, diretorio1, 
         diretorio2):
         Alien.__init__(self, screen, coord_x, coord_y, diretorio1, 
             diretorio2)
         """Inicializa atributos"""
         #Determina a velocidade de movimento
-        self.velocidade = 3
+        self.velocidade = 2
         
         #Determina a quantidade de pontos que o jogador irá ganhar...
         #...quanto um alien é derrotado
-        self.pontos = 30
+        self.pontos = 40
         
     def atualizar(self):
         """Atualiza as coordenadas e desenha o alien"""
         self.rect.y += self.velocidade
+        self.cont_projetil += 1
+        
+        #Alien atira um projetil quando o temporizador atinge um...
+        #...tempo predeterminado
+        if self.cont_projetil >= 75:
+            self.cont_projetil = 0
+            self.atirar = True
         
         #Muda a direção no eixo x em que o alien se movimenta
         #Produz uma trajetória em zig-zag
@@ -31,7 +38,7 @@ class AlienAmarelo(Alien):
         
         #Quando o alien anda a uma determinada distância no eixo x...
         #...suia direção é invertida
-        if self.cont_x >= 80:
+        if self.cont_x >= 75:
             self.cont_x = 0
             if self.direcao == 0:
                 self.direcao = 1
@@ -44,23 +51,8 @@ class AlienAmarelo(Alien):
         
         self.desenhar()
         
-            
         
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
